@@ -18,7 +18,7 @@ export const TargetInput: React.FC<TargetInputProps> = ({
         id="target-input"
         type="number"
         min={1}
-        className="w-32 px-2 py-1 border rounded text-right"
+        className="w-32 px-2 py-1 border rounded text-center"
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         placeholder="金額"

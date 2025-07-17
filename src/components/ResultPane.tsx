@@ -51,9 +51,12 @@ export const ResultPane: React.FC<ResultPaneProps> = ({
 
   return (
     <div className="p-4 border rounded-md">
-      <div className="font-bold mb-2">
-        計算結果（{result.length}件中 {page * PAGE_SIZE + 1}〜
-        {Math.min((page + 1) * PAGE_SIZE, result.length)}件表示）
+      <div className="flex justify-between mb-2">
+        <span className="font-bold">各役職の稼働日数</span>
+        <span className="text-right">
+          {result.length}件中 {page * PAGE_SIZE + 1}〜
+          {Math.min((page + 1) * PAGE_SIZE, result.length)}件表示
+        </span>
       </div>
       <table className="w-full border-collapse">
         <thead>
@@ -82,61 +85,65 @@ export const ResultPane: React.FC<ResultPaneProps> = ({
         </tbody>
       </table>
       {totalPages > 1 && (
-        <div className="flex flex-wrap justify-center gap-2 mt-4 items-center">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => setPage((p) => Math.max(0, p - 1))}
-            disabled={page === 0}
-          >
-            前へ
-          </Button>
-          {getPageNumbers().map((p) =>
-            p === -1 ? (
-              <span key={"start-ellipsis"} className="px-1">
-                …
-              </span>
-            ) : p === -2 ? (
-              <span key={"end-ellipsis"} className="px-1">
-                …
-              </span>
-            ) : (
-              <Button
-                key={p}
-                size="sm"
-                variant={p === page ? "default" : "outline"}
-                onClick={() => setPage(p)}
-                className="min-w-[2.5rem]"
-              >
-                {p + 1}
-              </Button>
-            )
-          )}
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-            disabled={page === totalPages - 1}
-          >
-            次へ
-          </Button>
-          <form
-            onSubmit={handlePageJump}
-            className="flex items-center gap-1 ml-2"
-          >
-            <Input
-              type="number"
-              min={1}
-              max={totalPages}
-              value={inputPage}
-              onChange={(e) => setInputPage(e.target.value)}
-              className="w-16 h-8 text-center text-sm"
-              placeholder="ページ"
-            />
-            <Button size="sm" type="submit" variant="outline">
-              移動
+        <div className="mt-4">
+          <div className="flex flex-wrap justify-center gap-2 items-center relative">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={page === 0}
+            >
+              前へ
             </Button>
-          </form>
+            {getPageNumbers().map((p) =>
+              p === -1 ? (
+                <span key={"start-ellipsis"} className="px-1">
+                  …
+                </span>
+              ) : p === -2 ? (
+                <span key={"end-ellipsis"} className="px-1">
+                  …
+                </span>
+              ) : (
+                <Button
+                  key={p}
+                  size="sm"
+                  variant={p === page ? "default" : "outline"}
+                  onClick={() => setPage(p)}
+                  className="min-w-[2.5rem]"
+                >
+                  {p + 1}
+                </Button>
+              )
+            )}
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+              disabled={page === totalPages - 1}
+            >
+              次へ
+            </Button>
+          </div>
+          <div className="flex justify-center mt-2">
+            <form
+              onSubmit={handlePageJump}
+              className="flex items-center gap-3 ml-2"
+            >
+              <Input
+                type="number"
+                min={1}
+                max={totalPages}
+                value={inputPage}
+                onChange={(e) => setInputPage(e.target.value)}
+                className="w-20 h-8 text-center text-sm"
+              />
+              ページへ
+              <Button size="sm" type="submit" variant="outline">
+                移動
+              </Button>
+            </form>
+          </div>
         </div>
       )}
     </div>

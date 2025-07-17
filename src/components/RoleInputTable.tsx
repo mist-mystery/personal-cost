@@ -18,6 +18,7 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import type { DragEndEvent } from "@dnd-kit/core";
 import {
   arrayMove,
   SortableContext,
@@ -44,22 +45,15 @@ function DraggableRow({
 }: {
   id: string;
   children: React.ReactNode;
-  [key: string]: any;
-}) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id });
+} & React.HTMLAttributes<HTMLTableRowElement>) {
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useSortable({ id });
   return (
     <tr
       ref={setNodeRef}
       style={{
         transform: CSS.Transform.toString(transform),
-        transition,
+        transition: isDragging ? "none" : undefined,
         opacity: isDragging ? 0.5 : 1,
         background: isDragging ? "#f1f5f9" : undefined,
       }}
@@ -83,9 +77,10 @@ export const RoleInputTable: React.FC<RoleInputTableProps> = ({
 }) => {
   const sensors = useSensors(useSensor(PointerSensor));
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (active.id !== over?.id) {
+    if (!over) return;
+    if (active.id !== over.id) {
       const oldIndex = roles.findIndex((_, i) => `row-${i}` === active.id);
       const newIndex = roles.findIndex((_, i) => `row-${i}` === over.id);
       onChange(arrayMove(roles, oldIndex, newIndex));
@@ -125,15 +120,17 @@ export const RoleInputTable: React.FC<RoleInputTableProps> = ({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[28px] min-w-[28px]" />
-                  <TableHead className="w-[90px] min-w-[70px]">
+                  <TableHead className="w-[28px] min-w-[28px] text-center" />
+                  <TableHead className="w-[90px] min-w-[70px] text-center">
                     役職名
                   </TableHead>
-                  <TableHead className="w-[80px] min-w-[60px]">
+                  <TableHead className="w-[80px] min-w-[60px] text-center">
                     人件費
                   </TableHead>
-                  <TableHead className="w-[60px] min-w-[40px]">人数</TableHead>
-                  <TableHead className="w-[48px] min-w-[40px]">操作</TableHead>
+                  <TableHead className="w-[60px] min-w-[40px] text-center">
+                    人数
+                  </TableHead>
+                  <TableHead className="w-[48px] min-w-[40px] text-center"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -213,6 +210,7 @@ export const RoleInputTable: React.FC<RoleInputTableProps> = ({
           size="icon"
           onClick={handleAdd}
           aria-label="行追加"
+          className="w-full max-w-[400px] flex justify-center"
         >
           <Plus className="w-5 h-5" />
         </Button>

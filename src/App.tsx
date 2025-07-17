@@ -21,7 +21,7 @@ export const App: React.FC = () => {
   const [result, setResult] = useState<{
     roles: RoleCost[];
     solutions: [number, number[]][];
-  }>({ roles: [], solutions: [] });
+  }>();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
@@ -76,7 +76,7 @@ export const App: React.FC = () => {
           <div className="h-4 w-1/2 bg-muted rounded mb-2" />
           <div className="h-4 w-2/3 bg-muted rounded" />
         </div>
-      ) : result.solutions.length > 0 && !error ? (
+      ) : result && !error ? (
         <ResultPane solutions={result.solutions} roles={result.roles} />
       ) : null}
       <ErrorToast message={error} onClose={() => setError("")} />
