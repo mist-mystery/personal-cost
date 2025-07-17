@@ -52,7 +52,7 @@ export const ResultPane: React.FC<ResultPaneProps> = ({
   return (
     <div className="p-4 border rounded-md">
       <div className="flex justify-between mb-2">
-        <span className="font-bold">各役職の稼働日数</span>
+        <span className="font-bold">各職種の稼働日数</span>
         <span className="text-right">
           {result.length}件中 {page * PAGE_SIZE + 1}〜
           {Math.min((page + 1) * PAGE_SIZE, result.length)}件表示

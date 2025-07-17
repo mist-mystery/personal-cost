@@ -27,13 +27,13 @@ export const App: React.FC = () => {
 
   const validate = (): string | null => {
     if (roles.some((r) => r.cost < 1 || r.count < 1)) {
-      return "人件費・人数はすべて1以上の自然数で入力してください。";
+      return "基準日額・人数はすべて1以上の自然数で入力してください。";
     }
     if (roles.some((r) => r.role.trim() === "")) {
-      return "役職名は空欄にできません。";
+      return "職種名は空欄にできません。";
     }
     if (new Set(roles.map((r) => r.role)).size !== roles.length) {
-      return "役職名が重複しています。";
+      return "職種名が重複しています。";
     }
     if (!target || target < 1) {
       return "目標金額は1以上の自然数で入力してください。";
@@ -59,6 +59,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-6">
+      <h1 className="font-bold text-2xl mb-4 text-center">人件費計算</h1>
       <RoleInputTable roles={roles} onChange={setRoles} />
       <div className="flex flex-col items-center gap-4">
         <div className="w-full flex justify-center">

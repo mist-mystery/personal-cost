@@ -82,7 +82,7 @@ export function count_total_prime_factors(n: number) {
   return factor_counts;
 }
 
-/** 役職とその人件費、人数の型定義 */
+/** 職種とその基準日額、人数の型定義 */
 export type RoleCost = {
   role: string;
   cost: number;
@@ -90,11 +90,11 @@ export type RoleCost = {
 };
 
 /**
- * 役職とその人件費、人数のリストに基づいて、目標金額に対する解を求める。
+ * 職種とその基準日額、人数のリストに基づいて、目標金額に対する解を求める。
  *
- * @param input 役職とその人件費、人数のリスト
- * @param targetAmount 目標金額（各役職の人件費の合計がこれに等しくなるような解のリストが戻り値）
- * @returns [変動係数, 解のリスト] の配列で、解のリストは各役職の稼働日数を表す。
+ * @param input 職種とその基準日額、人数のリスト
+ * @param targetAmount 目標金額（各職種の人件費の合計がこれに等しくなるような解のリストが戻り値）
+ * @returns [変動係数, 解のリスト] の配列で、解のリストは各職種の稼働日数を表す。
  */
 export function solve_indefinite_equation(
   input: readonly RoleCost[],

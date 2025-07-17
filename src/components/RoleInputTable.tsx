@@ -105,7 +105,7 @@ export const RoleInputTable: React.FC<RoleInputTableProps> = ({
   return (
     <div className="p-4 border rounded-md bg-card max-w-md mx-auto">
       <div className="font-bold mb-3 text-lg flex items-center gap-2">
-        役職・人件費・人数
+        職種・基準日額・人数を入力
       </div>
       <ScrollArea className="w-full overflow-x-auto">
         <DndContext
@@ -122,10 +122,10 @@ export const RoleInputTable: React.FC<RoleInputTableProps> = ({
                 <TableRow>
                   <TableHead className="w-[28px] min-w-[28px] text-center" />
                   <TableHead className="w-[90px] min-w-[70px] text-center">
-                    役職名
+                    職種
                   </TableHead>
                   <TableHead className="w-[80px] min-w-[60px] text-center">
-                    人件費
+                    基準日額
                   </TableHead>
                   <TableHead className="w-[60px] min-w-[40px] text-center">
                     人数
@@ -138,7 +138,7 @@ export const RoleInputTable: React.FC<RoleInputTableProps> = ({
                   <DraggableRow id={`row-${idx}`} key={idx}>
                     <TableCell>
                       <label className="sr-only" htmlFor={`role-${idx}`}>
-                        役職名
+                        職種
                       </label>
                       <Input
                         id={`role-${idx}`}
@@ -154,7 +154,7 @@ export const RoleInputTable: React.FC<RoleInputTableProps> = ({
                     </TableCell>
                     <TableCell>
                       <label className="sr-only" htmlFor={`cost-${idx}`}>
-                        人件費
+                        基準日額
                       </label>
                       <Input
                         id={`cost-${idx}`}
