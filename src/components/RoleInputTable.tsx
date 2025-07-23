@@ -33,10 +33,10 @@ export type RoleCost = {
   count: number;
 };
 
-interface RoleInputTableProps {
-  roles: RoleCost[];
-  onChange: (roles: RoleCost[]) => void;
-}
+type RoleInputTableProps = {
+  roles: readonly RoleCost[];
+  onChange: (roles: readonly RoleCost[]) => void;
+};
 
 function DraggableRow({
   id,
@@ -83,13 +83,14 @@ export const RoleInputTable: React.FC<RoleInputTableProps> = ({
     if (active.id !== over.id) {
       const oldIndex = roles.findIndex((_, i) => `row-${i}` === active.id);
       const newIndex = roles.findIndex((_, i) => `row-${i}` === over.id);
-      onChange(arrayMove(roles, oldIndex, newIndex));
+      // SAFETY: arrayMove は readonly な型を受け付けないためキャスト
+      onChange(arrayMove(roles as RoleCost[], oldIndex, newIndex));
     }
   };
 
   const handleChange = (idx: number, key: keyof RoleCost, value: string) => {
     const updated = roles.map((r, i) =>
-      i === idx ? { ...r, [key]: key === "role" ? value : Number(value) } : r
+      i === idx ? { ...r, [key]: key === "role" ? value : Number(value) } : r,
     );
     onChange(updated);
   };

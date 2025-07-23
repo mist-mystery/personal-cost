@@ -6,55 +6,77 @@ import { ResultPane } from "./components/ResultPane";
 import { ErrorToast } from "./components/ErrorToast";
 import { solve_indefinite_equation } from "./solve";
 import { Loader2 } from "lucide-react";
+import { Switch } from "./components/ui/switch";
 
-const defaultRoles: RoleCost[] = [
+const defaultRoles = [
   { role: "主任技師", cost: 66900, count: 1 },
   { role: "技師(A)", cost: 59600, count: 1 },
   { role: "技師(B)", cost: 48500, count: 1 },
   { role: "技師(C)", cost: 40300, count: 1 },
   { role: "技術員", cost: 36100, count: 1 },
-];
+] as const satisfies RoleCost[];
+
+const validate = (
+  roles: readonly RoleCost[],
+  target: number,
+): string | null => {
+  if (
+    roles.some(
+      (r) =>
+        r.cost < 1 ||
+        r.count < 1 ||
+        !Number.isInteger(r.cost) ||
+        !Number.isInteger(r.count),
+    )
+  ) {
+    return "基準日額・人数はすべて1以上の自然数で入力してください。";
+  }
+  if (roles.some((r) => r.role.trim() === "")) {
+    return "職種名は空欄にできません。";
+  }
+  if (new Set(roles.map((r) => r.role)).size !== roles.length) {
+    return "職種名が重複しています。";
+  }
+  if (target < 1 || !Number.isInteger(target)) {
+    return "目標金額は1以上の自然数で入力してください。";
+  }
+  return null;
+};
 
 export const App: React.FC = () => {
-  const [roles, setRoles] = useState<RoleCost[]>(defaultRoles);
+  const [roles, setRoles] = useState<readonly RoleCost[]>(defaultRoles);
   const [target, setTarget] = useState<number>(20000);
   const [result, setResult] = useState<{
-    roles: RoleCost[];
+    roles: readonly RoleCost[];
+    target: number;
     solutions: [number, number[]][];
   }>();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [filterEnabled, setFilterEnabled] = useState(true);
 
-  const validate = (): string | null => {
-    if (roles.some((r) => r.cost < 1 || r.count < 1)) {
-      return "基準日額・人数はすべて1以上の自然数で入力してください。";
-    }
-    if (roles.some((r) => r.role.trim() === "")) {
-      return "職種名は空欄にできません。";
-    }
-    if (new Set(roles.map((r) => r.role)).size !== roles.length) {
-      return "職種名が重複しています。";
-    }
-    if (!target || target < 1) {
-      return "目標金額は1以上の自然数で入力してください。";
-    }
-    return null;
-  };
+  // 千円単位になるように四捨五入した結果、目標金額からズレるものを弾くフィルタ
+  const filterFn = ([, row]: [number, number[]]) =>
+    row.reduce(
+      (acc, c, i) =>
+        acc + Math.round((c * (result?.roles[i]?.cost ?? 0)) / 1000),
+      0,
+    ) === result?.target;
 
   const handleSolve = () => {
-    const err = validate();
+    const err = validate(roles, target);
     if (err) {
       setError(err);
-      setResult({ roles: [], solutions: [] });
+      setResult({ roles: [], solutions: [], target });
       return;
     }
     setError("");
     setLoading(true);
-    setTimeout(() => {
+    requestIdleCallback(() => {
       const solutions = solve_indefinite_equation(roles, target * 1000);
-      setResult({ roles, solutions });
+      setResult({ roles, solutions, target });
       setLoading(false);
-    }, 0); // Use setTimeout to avoid blocking UI updates
+    });
   };
 
   return (
@@ -71,6 +93,10 @@ export const App: React.FC = () => {
           loading={loading}
         />
       </div>
+      <div className="flex justify-center items-center gap-2 mb-2">
+        <Switch checked={filterEnabled} onCheckedChange={setFilterEnabled} />
+        <span>端数処理により目標金額と一致しない解を除外</span>
+      </div>
       {loading ? (
         <div className="p-4 border rounded-md flex flex-col items-center justify-center min-h-[120px] animate-pulse bg-muted/50">
           <Loader2 className="w-8 h-8 animate-spin mb-2 text-muted-foreground" />
@@ -78,7 +104,12 @@ export const App: React.FC = () => {
           <div className="h-4 w-2/3 bg-muted rounded" />
         </div>
       ) : result && !error ? (
-        <ResultPane solutions={result.solutions} roles={result.roles} />
+        <ResultPane
+          solutions={
+            filterEnabled ? result.solutions.filter(filterFn) : result.solutions
+          }
+          roles={result.roles}
+        />
       ) : null}
       <ErrorToast message={error} onClose={() => setError("")} />
     </div>

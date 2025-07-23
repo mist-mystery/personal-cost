@@ -16,7 +16,7 @@ function dfs(
   min_value: number,
   asc: boolean,
   current: number[],
-  solutions: number[][]
+  solutions: number[][],
 ) {
   const coeff = coeffs[index]!;
 
@@ -98,7 +98,7 @@ export type RoleCost = {
  */
 export function solve_indefinite_equation(
   input: readonly RoleCost[],
-  targetAmount: number
+  targetAmount: number,
 ): [number, number[]][] {
   const costs = input.map(({ cost }) => cost);
   const solutions = solve_asc(costs, targetAmount);

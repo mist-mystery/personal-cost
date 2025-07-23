@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 
 interface ResultPaneProps {
   solutions: [number, number[]][];
-  roles: RoleCost[];
+  roles: readonly RoleCost[];
 }
 
 const PAGE_SIZE = 100;
@@ -114,7 +114,7 @@ export const ResultPane: React.FC<ResultPaneProps> = ({
                 >
                   {p + 1}
                 </Button>
-              )
+              ),
             )}
             <Button
               size="sm"
