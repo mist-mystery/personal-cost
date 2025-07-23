@@ -11,13 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Plus, Trash2, GripVertical } from "lucide-react";
-import {
-  DndContext,
-  closestCenter,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import type { DragEndEvent } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -46,8 +40,7 @@ function DraggableRow({
   id: string;
   children: React.ReactNode;
 } & React.HTMLAttributes<HTMLTableRowElement>) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({ id });
   return (
     <tr
       ref={setNodeRef}
@@ -59,11 +52,7 @@ function DraggableRow({
       }}
       {...props}
     >
-      <td
-        className="cursor-grab w-[28px] text-center align-middle"
-        {...attributes}
-        {...listeners}
-      >
+      <td className="cursor-grab w-[28px] text-center align-middle" {...attributes} {...listeners}>
         <GripVertical className="w-4 h-4 text-muted-foreground inline-block align-middle" />
       </td>
       {children}
@@ -71,10 +60,7 @@ function DraggableRow({
   );
 }
 
-export const RoleInputTable: React.FC<RoleInputTableProps> = ({
-  roles,
-  onChange,
-}) => {
+export const RoleInputTable: React.FC<RoleInputTableProps> = ({ roles, onChange }) => {
   const sensors = useSensors(useSensor(PointerSensor));
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -109,11 +95,7 @@ export const RoleInputTable: React.FC<RoleInputTableProps> = ({
         職種・基準日額・人数を入力
       </div>
       <ScrollArea className="w-full overflow-x-auto">
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext
             items={roles.map((_, i) => `row-${i}`)}
             strategy={verticalListSortingStrategy}
@@ -122,15 +104,9 @@ export const RoleInputTable: React.FC<RoleInputTableProps> = ({
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[28px] min-w-[28px] text-center" />
-                  <TableHead className="w-[90px] min-w-[70px] text-center">
-                    職種
-                  </TableHead>
-                  <TableHead className="w-[80px] min-w-[60px] text-center">
-                    基準日額
-                  </TableHead>
-                  <TableHead className="w-[60px] min-w-[40px] text-center">
-                    人数
-                  </TableHead>
+                  <TableHead className="w-[90px] min-w-[70px] text-center">職種</TableHead>
+                  <TableHead className="w-[80px] min-w-[60px] text-center">基準日額</TableHead>
+                  <TableHead className="w-[60px] min-w-[40px] text-center">人数</TableHead>
                   <TableHead className="w-[48px] min-w-[40px] text-center"></TableHead>
                 </TableRow>
               </TableHeader>

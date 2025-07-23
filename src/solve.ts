@@ -115,8 +115,7 @@ export function solve_indefinite_equation(
       const mean = solves.reduce((acc, x) => acc + x, 0) / solves.length;
       // 稼働日数の分散
       const variance =
-        solves.map((x) => (x - mean) ** 2).reduce((acc, v) => acc + v, 0) /
-        solves.length;
+        solves.map((x) => (x - mean) ** 2).reduce((acc, v) => acc + v, 0) / solves.length;
 
       // 変動係数 = 標準偏差 / 平均
       return [Math.sqrt(variance) / mean, solves] as [number, number[]];

@@ -16,17 +16,10 @@ const defaultRoles = [
   { role: "技術員", cost: 36100, count: 1 },
 ] as const satisfies RoleCost[];
 
-const validate = (
-  roles: readonly RoleCost[],
-  target: number,
-): string | null => {
+const validate = (roles: readonly RoleCost[], target: number): string | null => {
   if (
     roles.some(
-      (r) =>
-        r.cost < 1 ||
-        r.count < 1 ||
-        !Number.isInteger(r.cost) ||
-        !Number.isInteger(r.count),
+      (r) => r.cost < 1 || r.count < 1 || !Number.isInteger(r.cost) || !Number.isInteger(r.count),
     )
   ) {
     return "基準日額・人数はすべて1以上の自然数で入力してください。";
@@ -57,11 +50,8 @@ export const App: React.FC = () => {
 
   // 千円単位になるように四捨五入した結果、目標金額からズレるものを弾くフィルタ
   const filterFn = ([, row]: [number, number[]]) =>
-    row.reduce(
-      (acc, c, i) =>
-        acc + Math.round((c * (result?.roles[i]?.cost ?? 0)) / 1000),
-      0,
-    ) === result?.target;
+    row.reduce((acc, c, i) => acc + Math.round((c * (result?.roles[i]?.cost ?? 0)) / 1000), 0) ===
+    result?.target;
 
   const handleSolve = () => {
     const err = validate(roles, target);
@@ -87,11 +77,7 @@ export const App: React.FC = () => {
         <div className="w-full flex justify-center">
           <TargetInput value={target} onChange={setTarget} />
         </div>
-        <SolveButton
-          onClick={handleSolve}
-          disabled={loading}
-          loading={loading}
-        />
+        <SolveButton onClick={handleSolve} disabled={loading} loading={loading} />
       </div>
       <div className="flex justify-center items-center gap-2 mb-2">
         <Switch checked={filterEnabled} onCheckedChange={setFilterEnabled} />
@@ -105,9 +91,7 @@ export const App: React.FC = () => {
         </div>
       ) : result && !error ? (
         <ResultPane
-          solutions={
-            filterEnabled ? result.solutions.filter(filterFn) : result.solutions
-          }
+          solutions={filterEnabled ? result.solutions.filter(filterFn) : result.solutions}
           roles={result.roles}
         />
       ) : null}

@@ -5,10 +5,7 @@ interface TargetInputProps {
   onChange: (value: number) => void;
 }
 
-export const TargetInput: React.FC<TargetInputProps> = ({
-  value,
-  onChange,
-}) => {
+export const TargetInput: React.FC<TargetInputProps> = ({ value, onChange }) => {
   return (
     <div className="flex items-center gap-2">
       <label className="font-semibold" htmlFor="target-input">

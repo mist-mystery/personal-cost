@@ -11,21 +11,14 @@ interface ResultPaneProps {
 const PAGE_SIZE = 100;
 const PAGE_WINDOW = 2;
 
-export const ResultPane: React.FC<ResultPaneProps> = ({
-  solutions: result,
-  roles,
-}) => {
+export const ResultPane: React.FC<ResultPaneProps> = ({ solutions: result, roles }) => {
   const [page, setPage] = useState(0);
   const [inputPage, setInputPage] = useState("");
   const totalPages = Math.ceil(result.length / PAGE_SIZE);
   const paged = result.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
   if (!result || result.length === 0) {
-    return (
-      <div className="p-4 border rounded-md text-center text-red-500">
-        解が見つかりません
-      </div>
-    );
+    return <div className="p-4 border rounded-md text-center text-red-500">解が見つかりません</div>;
   }
 
   // ページ番号リスト生成
@@ -77,9 +70,7 @@ export const ResultPane: React.FC<ResultPaneProps> = ({
                   {val}
                 </td>
               ))}
-              <td className="border px-2 py-1 text-right">
-                {variance.toFixed(4)}
-              </td>
+              <td className="border px-2 py-1 text-right">{variance.toFixed(4)}</td>
             </tr>
           ))}
         </tbody>
@@ -126,10 +117,7 @@ export const ResultPane: React.FC<ResultPaneProps> = ({
             </Button>
           </div>
           <div className="flex justify-center mt-2">
-            <form
-              onSubmit={handlePageJump}
-              className="flex items-center gap-3 ml-2"
-            >
+            <form onSubmit={handlePageJump} className="flex items-center gap-3 ml-2">
               <Input
                 type="number"
                 min={1}
