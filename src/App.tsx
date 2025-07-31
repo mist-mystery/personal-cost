@@ -50,8 +50,14 @@ export const App: React.FC = () => {
 
   // 千円単位になるように四捨五入した結果、目標金額からズレるものを弾くフィルタ
   const filterFn = ([, row]: [number, number[]]) =>
-    row.reduce((acc, c, i) => acc + Math.round((c * (result?.roles[i]?.cost ?? 0)) / 1000), 0) ===
-    result?.target;
+    row.reduce(
+      (acc, c, i) =>
+        acc +
+        Math.round(
+          (c * (result?.roles[i] ? result.roles[i].cost * result.roles[i].count : 0)) / 1000,
+        ),
+      0,
+    ) === result?.target;
 
   const handleSolve = () => {
     const err = validate(roles, target);
